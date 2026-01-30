@@ -1,5 +1,6 @@
 import { verifyWebhook } from '@clerk/nextjs/webhooks'
 import { NextRequest } from 'next/server'
+import { createUser } from '@/app/lib/actions/user'
 
 export const runtime = 'nodejs'
 
@@ -7,15 +8,13 @@ export async function POST(req: NextRequest) {
   try {
     const evt = await verifyWebhook(req)
 
-    // Do something with payload
-    // For this guide, log payload to console
+
     const { id } = evt.data
     const eventType = evt.type
-    console.log("CREATE WEBHOOK CALLED ->CREATE USER")
-      console.log(`Received event ${eventType} for user ${id}`)
     if (evt.type === 'user.created') {
-          console.log('userId:', evt.data.id)
-     }
+          console.log('userId:', evt.data)
+          
+     }  
 
     return new Response('Webhook received', { status: 200 })
   } catch (err) {
