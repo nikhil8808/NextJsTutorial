@@ -8,7 +8,7 @@ export const connectDB = async () => {
         if (initialized) return
         mongoose.set('strictQuery', true)
         await mongoose.connect(MONGO_DB_URI, {
-            dbName: 'nextjs_mongodb',
+            dbName: 'next-blog',
          
 
         })
