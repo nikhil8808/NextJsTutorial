@@ -1,4 +1,5 @@
 import UserModel from "../models/User.model";
+import { connectDB } from "../mongodb/mongoose";
 
 export const createUser = async (
     clerkId: string,
@@ -9,6 +10,10 @@ export const createUser = async (
     profileImage: string
 ) => {
     try {
+       let isDBConnected = await connectDB();
+        if (!isDBConnected) {
+            throw new Error("Failed to connect to database");
+        }
         const user = await UserModel.create({
             clerkId,
             firstName, 
