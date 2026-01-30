@@ -12,8 +12,15 @@ export async function POST(req: NextRequest) {
     const { id } = evt.data
     const eventType = evt.type
     if (evt.type === 'user.created') {
-          console.log('userId:', evt.data)
-          
+      const { first_name, last_name, email_addresses, username, profile_image_url } = evt.data
+      await createUser(
+        first_name as string,
+        last_name as string,
+        email_addresses[0].email_address as string,
+        username as string,
+        profile_image_url as string
+      )
+
      }  
 
     return new Response('Webhook received', { status: 200 })
