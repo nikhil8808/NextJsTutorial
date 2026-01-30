@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         last_name as string,
         email_addresses[0].email_address as string,
         username as string,
-       "https://www.gravatar.com/avatar/00000000000000000000000000000000"
+       "https://imgs.search.brave.com/en8GueUwEke4A7ecDjpRnIpFR8Y-WWOEbjzD2xCNTu0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWd2/My5mb3Rvci5jb20v/aW1hZ2VzL2hvbWVw/YWdlLWZlYXR1cmUt/Y2FyZC9mb3Rvci0z/ZC1hdmF0YXIuanBn"
       )
       return new Response(JSON.stringify(user), { status: 200 })
      }  
