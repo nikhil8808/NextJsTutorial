@@ -12,20 +12,20 @@ export async function POST(req: NextRequest) {
     const { id } = evt.data
     const eventType = evt.type
     if (evt.type === 'user.created') {
-      const { first_name, last_name, email_addresses, username, profile_image_url } = evt.data
-      console.log(first_name, last_name, email_addresses, username, profile_image_url)
+      const { first_name, last_name, email_addresses, username } = evt.data
+      console.log(first_name, last_name, email_addresses, username)
 
      const user = await createUser(
         first_name as string,
         last_name as string,
         email_addresses[0].email_address as string,
         username as string,
-        profile_image_url as string
+       "https://www.gravatar.com/avatar/00000000000000000000000000000000"
       )
-
+      return new Response(JSON.stringify(user), { status: 200 })
      }  
 
-    return new Response('Webhook received', { status: 200 ,data:user})
+    
   } catch (err) {
     console.error('Error verifying webhook:', err)
     return new Response('Error verifying webhook', { status: 400 })
