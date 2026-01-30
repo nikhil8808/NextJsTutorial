@@ -1,6 +1,7 @@
 import UserModel from "../models/User.model";
 
 export const createUser = async (
+    clerkId: string,
     firstName: string,
     lastName: string,
     email: string,
@@ -9,6 +10,7 @@ export const createUser = async (
 ) => {
     try {
         const user = await UserModel.create({
+            clerkId,
             firstName, 
             lastName, 
             email,

@@ -9,9 +9,10 @@ export async function POST(req: NextRequest) {
     const evt = await verifyWebhook(req)
 
     if (evt.type === 'user.created') {
-      const { first_name, last_name, email_addresses, username } = evt.data
+      const { first_name, last_name, email_addresses, username,id } = evt.data
 
       const user = await createUser(
+        id as string,
         first_name as string,
         last_name as string,
         email_addresses[0].email_address as string,
