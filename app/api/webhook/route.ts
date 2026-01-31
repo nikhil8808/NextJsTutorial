@@ -1,6 +1,8 @@
 import { verifyWebhook } from '@clerk/nextjs/webhooks'
 import { NextRequest } from 'next/server'
-import { createUser } from '@/app/lib/actions/user'
+import { createUser,updateUser } from '@/app/lib/actions/user'
+import { clerkClient } from '@clerk/nextjs/server'
+import UserModel from '@/app/lib/models/User.model'
 
 export const runtime = 'nodejs'
 
@@ -9,7 +11,8 @@ export async function POST(req: NextRequest) {
     const evt = await verifyWebhook(req)
 
     if (evt.type === 'user.created') {
-      const { first_name, last_name, email_addresses, username,id } = evt.data
+
+      const { first_name, last_name, email_addresses, username, id } = evt.data
 
       const user = await createUser(
         id as string,
@@ -19,8 +22,46 @@ export async function POST(req: NextRequest) {
         username as string,
         'https://imgs.search.brave.com/en8GueUwEke4A7ecDjpRnIpFR8Y-WWOEbjzD2xCNTu0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWd2/My5mb3Rvci5jb20v/aW1hZ2VzL2hvbWVw/YWdlLWZlYXR1cmUt/Y2FyZC9mb3Rvci0z/ZC1hdmF0YXIuanBn'
       )
+      const client = await clerkClient()
+      await client.users.updateUser(id, {
+        publicMetadata: {
+          userMongoId: user._id.toString(),
+          isAdmin: Boolean(user.isAdmin),
+        },
+      })
+
 
       return new Response(JSON.stringify(user), { status: 200 })
+    }
+
+
+    if (evt.type === 'user.updated') {
+    
+      const {id}= evt.data
+ 
+      const client = await clerkClient()
+
+      const clerkUser=await client.users.getUser(id as string)
+      const user= await updateUser(
+        id as string,
+        clerkUser.firstName as string,
+        clerkUser.lastName as string,
+        clerkUser.emailAddresses[0].emailAddress as string,
+        clerkUser.username as string,
+       'https://imgs.search.brave.com/en8GueUwEke4A7ecDjpRnIpFR8Y-WWOEbjzD2xCNTu0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWd2/My5mb3Rvci5jb20v/aW1hZ2VzL2hvbWVw/YWdlLWZlYXR1cmUt/Y2FyZC9mb3Rvci0z/ZC1hdmF0YXIuanBn'
+      
+      )
+        
+
+      return new Response(JSON.stringify(user), { status: 200 })
+    }
+
+    if (evt.type === 'user.deleted') {
+      // Handle user.deleted event if needed
+
+    
+      return new Response('user.deleted event received', { status: 200 })
+
     }
 
     // ✅ IMPORTANT: respond for all other event types

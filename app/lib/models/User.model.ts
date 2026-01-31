@@ -6,7 +6,8 @@ const User=new mongoose.Schema({
      lastName:{type:String,required:true},
      email:{type:String,required:true},
      userName:{type:String,required:true,unique:true},
-     profileImage:{type:String,required:true}
+     profileImage:{type:String,required:true},
+     isAdmin:{type:Boolean,default:false}
      
    
 
