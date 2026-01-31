@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
       const client = await clerkClient()
 
       const clerkUser=await client.users.getUser(id as string)
+      console.log("Clerk Update  User Data:",clerkUser)
       const user= await updateUser(
         id as string,
         clerkUser.firstName as string,

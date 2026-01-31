@@ -42,6 +42,7 @@ export const updateUser =async (
     try{
         let isDBConnected = await connectDB();
         if (!isDBConnected) {
+            console.log("DB Connection Failed");
             throw new Error("Failed to connect to database");
         }
         const user = await UserModel.findOneAndUpdate(
@@ -49,6 +50,8 @@ export const updateUser =async (
             { firstName, lastName, email, userName, profileImage },
             { new: true }
         );
+        console.log("Updated User:", user);
+
         return user;
 
     }catch(e:any){
