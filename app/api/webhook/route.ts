@@ -10,7 +10,7 @@ export const runtime = 'nodejs'
 export async function POST(req: NextRequest) {
   try {
     const evt = await verifyWebhook(req)
-      const client = await clerkClient()
+    const client = await clerkClient()
 
      let isDBConnected = await connectDB();
         if (!isDBConnected) {
@@ -59,6 +59,7 @@ export async function POST(req: NextRequest) {
         clerkUser.imageUrl as string
       
       )
+      console.log("UPDATED USER DATA:",user)
         
 
       return new Response(JSON.stringify(user), { status: 200 })
