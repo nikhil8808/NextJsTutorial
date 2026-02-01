@@ -45,6 +45,7 @@ export const updateUser =async (
         if (!isDBConnected) {
             throw new Error("Failed to connect to database");
         }
+        console.log("Updating User with clerkId:", clerkId);
         const user=await UserModel.findOne({clerkId});
         if(!user){
             throw new Error("User not found");
