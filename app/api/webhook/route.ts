@@ -66,11 +66,13 @@ export async function POST(req: NextRequest) {
     if (evt.type === 'user.deleted') {
       // Handle user.deleted event if needed
       const { id } = evt.data
-      const clerkUser = await client.users.getUser(id as string)
-      if(!clerkUser){
-           return new Response('User Not Found ', { status: 404 })
-      }
+      // const clerkUser = await client.users.getUser(id as string)
+      // if(!clerkUser){
+      //      return new Response('User Not Found ', { status: 404 })
+      // }
       const deleteResult=await deleteUserByClerkId(id as string);
+
+
       if(!deleteResult?.deletedCount){
            return new Response('Error Deleting User', { status: 500 })
       }
