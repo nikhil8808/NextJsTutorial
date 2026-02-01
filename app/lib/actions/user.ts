@@ -10,6 +10,10 @@ export const createUser = async (
     profileImage: string
 ) => {
     try {
+           let isDBConnected = await connectDB();
+        if (!isDBConnected) {
+            throw new Error("Failed to connect to database");
+        }
  
         const user = await UserModel.create({
             clerkId,
@@ -37,6 +41,10 @@ export const updateUser =async (
     profileImage?:string
 )=>{
     try{
+        let isDBConnected = await connectDB();
+        if (!isDBConnected) {
+            throw new Error("Failed to connect to database");
+        }
     
         const user = await UserModel.findOneAndUpdate(
             { clerkId },
