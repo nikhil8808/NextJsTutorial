@@ -77,3 +77,16 @@ export const getUserByClerkId=async(clerkId:string)=>{
     }
 
 }
+
+export const deleteUserByClerkId=async(clerkId:string)=>{
+    try{
+        let isDBConnected = await connectDB();
+        if (!isDBConnected) {
+            throw new Error("Failed to connect to database");
+        }
+        const result=await UserModel.deleteOne({clerkId});
+        return result;
+    }catch(e:any){
+        console.log(e,"Delete User By ClerkId Error")
+    }
+}

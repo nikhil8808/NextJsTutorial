@@ -1,6 +1,6 @@
 import { verifyWebhook } from '@clerk/nextjs/webhooks'
 import { NextRequest } from 'next/server'
-import { createUser, updateUser } from '@/app/lib/actions/user'
+import { createUser, updateUser,deleteUserByClerkId } from '@/app/lib/actions/user'
 import { clerkClient } from '@clerk/nextjs/server'
 import UserModel from '@/app/lib/models/User.model'
 import { connectDB } from '@/app/lib/mongodb/mongoose'
@@ -65,9 +65,21 @@ export async function POST(req: NextRequest) {
 
     if (evt.type === 'user.deleted') {
       // Handle user.deleted event if needed
+      const { id } = evt.data
+      const clerkUser = await client.users.getUser(id as string)
+      if(!clerkUser){
+           return new Response('User Not Found ', { status: 404 })
+      }
+      const deleteResult=await deleteUserByClerkId(id as string);
+      if(!deleteResult?.deletedCount){
+           return new Response('Error Deleting User', { status: 500 })
+      }
+
+      console.log(`User with ID ${id} has been deleted.`)
 
 
-      return new Response('user.deleted event received', { status: 200 })
+
+      return new Response('USER Deleted Successfully', { status: 200 })
 
     }
 
