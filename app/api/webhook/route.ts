@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server'
 import { createUser,updateUser } from '@/app/lib/actions/user'
 import { clerkClient } from '@clerk/nextjs/server'
 import UserModel from '@/app/lib/models/User.model'
+import { connectDB } from '@/app/lib/mongodb/mongoose'
 
 export const runtime = 'nodejs'
 
@@ -10,6 +11,12 @@ export async function POST(req: NextRequest) {
   try {
     const evt = await verifyWebhook(req)
       const client = await clerkClient()
+
+     let isDBConnected = await connectDB();
+        if (!isDBConnected) {
+                 console.log("DB Connection Failed");
+                  throw new Error("Failed to connect to database");
+          }
 
     if (evt.type === 'user.created') {
 
@@ -43,18 +50,18 @@ export async function POST(req: NextRequest) {
       const clerkUser=await client.users.getUser(id as string)
       console.log("UPDATE EVENT TRIGGERED")
       console.log("CLERK USER UPDATE DATA:",clerkUser)
-      // const user= await updateUser(
-      //   id as string,
-      //   clerkUser.firstName as string,
-      //   clerkUser.lastName as string,
-      //   clerkUser.emailAddresses[0].emailAddress as string,
-      //   clerkUser.username as string,
-      //  'https://imgs.search.brave.com/en8GueUwEke4A7ecDjpRnIpFR8Y-WWOEbjzD2xCNTu0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWd2/My5mb3Rvci5jb20v/aW1hZ2VzL2hvbWVw/YWdlLWZlYXR1cmUt/Y2FyZC9mb3Rvci0z/ZC1hdmF0YXIuanBn'
+      const user= await updateUser(
+        id as string,
+        clerkUser.firstName as string,
+        clerkUser.lastName as string,
+        clerkUser.emailAddresses[0].emailAddress as string,
+        clerkUser.username as string,
+        clerkUser.imageUrl as string
       
-      // )
+      )
         
 
-      return new Response(JSON.stringify(clerkUser), { status: 200 })
+      return new Response(JSON.stringify(user), { status: 200 })
     }
 
     if (evt.type === 'user.deleted') {
