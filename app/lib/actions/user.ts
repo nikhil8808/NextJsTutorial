@@ -60,6 +60,7 @@ export const updateUser =async (
 
     }catch(e:any){
         console.log(e,"Update User Error")
+         throw new Error(e.message);
     }
 
 }
@@ -74,19 +75,19 @@ export const getUserByClerkId=async(clerkId:string)=>{
         return user;
     }catch(e:any){
         console.log(e,"Get User By ClerkId Error")
+         throw new Error(e.message);
     }
 
 }
 
 export const deleteUserByClerkId=async(clerkId:string)=>{
     try{
-        let isDBConnected = await connectDB();
-        if (!isDBConnected) {
-            throw new Error("Failed to connect to database");
-        }
+        await connectDB();
+     
         const result=await UserModel.deleteOne({clerkId});
         return result;
     }catch(e:any){
         console.log(e,"Delete User By ClerkId Error")
+         throw new Error(e.message);
     }
 }
