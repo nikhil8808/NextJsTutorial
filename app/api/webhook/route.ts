@@ -9,6 +9,7 @@ export const runtime = 'nodejs'
 export async function POST(req: NextRequest) {
   try {
     const evt = await verifyWebhook(req)
+      const client = await clerkClient()
 
     if (evt.type === 'user.created') {
 
@@ -22,7 +23,7 @@ export async function POST(req: NextRequest) {
         username as string,
         'https://imgs.search.brave.com/en8GueUwEke4A7ecDjpRnIpFR8Y-WWOEbjzD2xCNTu0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWd2/My5mb3Rvci5jb20v/aW1hZ2VzL2hvbWVw/YWdlLWZlYXR1cmUt/Y2FyZC9mb3Rvci0z/ZC1hdmF0YXIuanBn'
       )
-      const client = await clerkClient()
+    
       await client.users.updateUser(id, {
         publicMetadata: {
           userMongoId: user._id.toString(),
@@ -39,22 +40,21 @@ export async function POST(req: NextRequest) {
     
       const {id}= evt.data
  
-      const client = await clerkClient()
-
       const clerkUser=await client.users.getUser(id as string)
-      console.log("Clerk Update  User Data:",clerkUser)
-      const user= await updateUser(
-        id as string,
-        clerkUser.firstName as string,
-        clerkUser.lastName as string,
-        clerkUser.emailAddresses[0].emailAddress as string,
-        clerkUser.username as string,
-       'https://imgs.search.brave.com/en8GueUwEke4A7ecDjpRnIpFR8Y-WWOEbjzD2xCNTu0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWd2/My5mb3Rvci5jb20v/aW1hZ2VzL2hvbWVw/YWdlLWZlYXR1cmUt/Y2FyZC9mb3Rvci0z/ZC1hdmF0YXIuanBn'
+      console.log("UPDATE EVENT TRIGGERED")
+      console.log("CLERK USER UPDATE DATA:",clerkUser)
+      // const user= await updateUser(
+      //   id as string,
+      //   clerkUser.firstName as string,
+      //   clerkUser.lastName as string,
+      //   clerkUser.emailAddresses[0].emailAddress as string,
+      //   clerkUser.username as string,
+      //  'https://imgs.search.brave.com/en8GueUwEke4A7ecDjpRnIpFR8Y-WWOEbjzD2xCNTu0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWd2/My5mb3Rvci5jb20v/aW1hZ2VzL2hvbWVw/YWdlLWZlYXR1cmUt/Y2FyZC9mb3Rvci0z/ZC1hdmF0YXIuanBn'
       
-      )
+      // )
         
 
-      return new Response(JSON.stringify(user), { status: 200 })
+      return new Response(JSON.stringify(clerkUser), { status: 200 })
     }
 
     if (evt.type === 'user.deleted') {
