@@ -45,12 +45,20 @@ export const updateUser =async (
         if (!isDBConnected) {
             throw new Error("Failed to connect to database");
         }
+        const user=await UserModel.findOne({clerkId});
+        if(!user){
+            throw new Error("User not found");
+        }
+        console.log("Current User Data:", user);
+        if(firstName)user.firstName=firstName;
+        if(lastName)user.lastName=lastName;
+        if(email)user.email=email;
+        if(userName)user.userName=userName;
+        if(profileImage)user.profileImage=profileImage;
+        await user.save();
     
-        const user = await UserModel.findOneAndUpdate(
-            { clerkId },
-            { firstName, lastName, email, userName, profileImage },
-            { new: true }
-        );
+
+
         console.log("Updated User:", user);
 
         return user;
