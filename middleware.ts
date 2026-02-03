@@ -5,11 +5,16 @@ const isPublicRoute = createRouteMatcher([
   '/sign-up(.*)',
    '/api/webhook(.*)', // <-- add this line to allow webhooks
 ])
+const adminRoutes = createRouteMatcher([
+  '/dashboard/create-post(.*)',
+])
 
 export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
-    await auth.protect()
+      await auth.protect()
   }
+
+
 })
 
 export const config = {
